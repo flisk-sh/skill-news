@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>skill-news: new Claude Code skills, weekly</title>
+<meta name="description" content="A weekly popup in Claude Code that shows new skills from GitHub and installs the ones you pick.">
+<style>
+  :root { --bg:#fbfaf7; --fg:#1f1e1b; --muted:#6b6a64; --card:#fff; --line:#e4e1d8; --accent:#d97757; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1a1917; --fg:#f1efe8; --muted:#a3a198; --card:#242321; --line:#3a3834; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,sans-serif; }
+  main { max-width:640px; margin:0 auto; padding:48px 16px; }
+  h1 { font-size:32px; margin:0 0 8px; }
+  p.lead { color:var(--muted); margin:0 0 28px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  pre { margin:0; white-space:pre-wrap; word-break:break-word; font:14px/1.6 ui-monospace,Menlo,monospace; }
+  .row { display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
+  .btn { display:inline-block; border:1px solid var(--line); background:var(--card); color:var(--fg); padding:10px 16px; border-radius:8px; font:inherit; font-weight:500; cursor:pointer; text-decoration:none; }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  h2 { font-size:18px; margin:36px 0 8px; }
+  ul { padding-left:20px; color:var(--muted); }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>skill-news</h1>
+  <p class="lead">Every week Claude Code opens a popup, shows the new skills that landed on GitHub, and installs the ones you tick.</p>
+
+  <div class="card"><pre id="prompt"></pre></div>
+  <div class="row">
+    <button class="btn" id="copy" type="button">Copy prompt</button>
+    <a class="btn primary" id="open" href="#">Open in Claude Code</a>
+    <a class="btn" href="https://raw.githubusercontent.com/flisk-sh/skill-news/main/feed.xml">RSS feed</a>
+  </div>
+  <p id="note" role="status" style="color:var(--muted);min-height:1.6em"></p>
+
+  <h2>How it works</h2>
+  <ul>
+    <li>A daily GitHub Action reads skill repos and writes one RSS feed.</li>
+    <li>A weekly Claude Code task reads the feed and asks you what to install.</li>
+    <li>No server, no keys, no database. <a href="https://github.com/flisk-sh/skill-news">Source on GitHub</a>.</li>
+  </ul>
+</main>
+<script>
+  var PROMPT = "Every Monday at 9, read https://raw.githubusercontent.com/flisk-sh/skill-news/main/feed.xml, find skills added in the last 7 days, ask me with the AskUserQuestion popup (multi-select) which to install, and copy the chosen ones into ~/.claude/skills/.";
+  var note = document.getElementById("note");
+  document.getElementById("prompt").textContent = PROMPT;
+  document.getElementById("open").href = "claude://code/new?q=" + encodeURIComponent(PROMPT);
+  document.getElementById("open").addEventListener("click", function () {
+    note.textContent = "Opening Claude Code. If nothing happens, install the desktop app and use Copy prompt.";
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    var done = function () { note.textContent = "Copied. Paste it into Claude Code."; };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(PROMPT).then(done, function () { note.textContent = "Copy failed. Select the text and copy it."; });
+    } else { note.textContent = "Select the text and copy it."; }
+  });
+</script>
+</body>
+</html>
