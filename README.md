@@ -16,6 +16,14 @@ New skills land every week in repos like `anthropics/skills` and `mattpocock/ski
 
 2. Or subscribe to the feed in any RSS reader: `https://raw.githubusercontent.com/flisk-sh/skill-news/main/feed.xml`
 
+## Or install it as a skill
+
+```bash
+git clone --depth 1 https://github.com/flisk-sh/skill-news /tmp/skill-news && cp -R /tmp/skill-news/skills/skill-news ~/.claude/skills/
+```
+
+Then type `/skill-news` in Claude Code any time.
+
 ## How it works
 
 A daily GitHub Action reads the Atom feeds in `sources.json` and writes `feed.xml`. No server, no keys, no database.
