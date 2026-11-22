@@ -24,6 +24,10 @@ git clone --depth 1 https://github.com/flisk-sh/skill-news /tmp/skill-news && cp
 
 Then type `/skill-news` in Claude Code any time.
 
+## Installing the picks
+
+Claude Code's permission system can block a scheduled task from writing into `~/.claude/skills/`. When that happens, skill-news prints one install command per skill you ticked. Paste it into a terminal and the skill loads without a restart.
+
 ## How it works
 
 A daily GitHub Action reads the Atom feeds in `sources.json` and writes `feed.xml`. No server, no keys, no database.
