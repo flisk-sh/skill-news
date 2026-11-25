@@ -14,6 +14,10 @@ for (const url of sources) {
     const title = e.match(/<title>([\s\S]*?)<\/title>/)?.[1].trim() ?? "";
     const link = e.match(/<link[^>]*href="([^"]+)"/)?.[1] ?? "";
     const date = e.match(/<updated>([^<]+)/)?.[1] ?? "";
+    if (Number.isNaN(Date.parse(date))) {
+      console.warn(`skipping undated entry in ${repo}: ${title}`);
+      continue;
+    }
     items.push({ title, link, date, repo });
   }
 }
